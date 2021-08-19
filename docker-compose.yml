@@ -3,7 +3,7 @@ version: '3'
 volumes:
   # static volume will be mounted to both nginx and django gunicorn services.
   static_volume:
-  # postgres data volume will be mounted to postgres services
+  # postgres data volume will be mounted to postgres services 
   postgres_data:
  
 services:

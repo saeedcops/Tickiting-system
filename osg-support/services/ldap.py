@@ -1,6 +1,7 @@
 from ldap3 import Server, Connection, ALL
 
-LDAP_URL = 'ldap.forumsys.com'
+LDAP_URL = 'ldap.cops.com'
+# LDAP_URL = 'ldap.forumsys.com'
 
 # Check user authentication in the LDAP and return his information
 def get_LDAP_user(username, password):
