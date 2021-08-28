@@ -1,0 +1,14 @@
+AuthLDAPBindDN "CN=bind,CN=Users,DC=cops,DC=com"
+AuthLDAPBindPassword "P@ssw0rd"
+# search user ?sAMAccountName?sub?(objectClass=) ?userPrincipalName?sub
+AuthLDAPURL "ldaps://dc.cops.com/OU=IT,DC=cops,DC=com?sAMAccountName?sub"
+AuthType Basic
+AuthName "USE YOUR WINDOWS ACCOUNT"
+AuthBasicProvider ldap
+# Important, otherwise "(9)Bad file descriptor: Could not open password file: (null)"
+AuthUserFile /dev/null
+Require ldap-group CN=Django Admin,OU=IT,DC=cops,DC=com
+require valid-user
+AuthLDAPBindDN "CN=bind,CN=IT,DC=cops,DC=com"
+AuthLDAPCompareAsUser  on
+LDAPReferrals          off
