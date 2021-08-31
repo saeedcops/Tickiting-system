@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
-import ldap
-from django_auth_ldap.config import LDAPSearch
+# import ldap
+# from django_auth_ldap.config import LDAPSearch
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = "%(bx6db6l+whmv6nc1-6dx6=pj!i9*1^#v=^1p-frb+3*a0kn8"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -49,53 +49,63 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-     # Add the new middleware just after the default AuthenticationMiddleware that manages sessions and cookies
-    # 'osg-support.authentication_middleware.AutomaticUserLoginMiddleware',
-
-      # specifying them in the LOGIN_EXEMPT_URLS setting.
-    # 'django_auth_adfs.middleware.LoginRequiredMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+# MIDDLEWARE = [
+#     'django.middleware.security.SecurityMiddleware',
+#     'django.contrib.sessions.middleware.SessionMiddleware',
+#     'django.middleware.common.CommonMiddleware',
+#     'django.middleware.csrf.CsrfViewMiddleware',
+#     'django.contrib.auth.middleware.AuthenticationMiddleware',
+#     #  Add the new middleware just after the default AuthenticationMiddleware that manages sessions and cookies
+#     'osg-support.authentication_middleware.AutomaticUserLoginMiddleware',
 
+#       # specifying them in the LOGIN_EXEMPT_URLS setting.
+#     # 'django_auth_adfs.middleware.LoginRequiredMiddleware',
+#     'django.contrib.messages.middleware.MessageMiddleware',
+#     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+# ]
+
+# AUTHENTICATION_BACKENDS = [
+#    'osg-support.authentication_backend.AuthenticationBackend',
+# ]
 # AUTHENTICATION_BACKENDS = (
 #     'django_auth_adfs.backend.AdfsAuthCodeBackend',
 # )
 
 # 636 or 3269
-AUTH_LDAP_SERVER_URI = 'ldap://192.168.175.200'
-AUTH_LDAP_BIND_DN = "CN=bind,CN=Users,DC=cops,DC=com"
-AUTH_LDAP_BIND_PASSWORD = "P@ssw0rd"
-AUTH_LDAP_USER_SEARCH = LDAPSearch(
-            "dc=cops,dc=com", ldap.SCOPE_SUBTREE, "sAMAccountName=%(user)s"
-            )
+# AUTH_LDAP_SERVER_URI = 'ldap://192.168.175.200'
+# AUTH_LDAP_BIND_DN = "CN=bind,CN=Users,DC=cops,DC=com"
+# AUTH_LDAP_BIND_PASSWORD = "P@ssw0rd"
+# AUTH_LDAP_USER_SEARCH = LDAPSearch(
+#             "dc=cops,dc=com", ldap.SCOPE_SUBTREE, "sAMAccountName=%(user)s"
+#             )
 
-AUTH_LDAP_USER_ATTR_MAP = {
-            "username": "sAMAccountName",
-                "first_name": "givenName",
-                    "last_name": "sn",
-                        "email": "mail",
-}
-from django_auth_ldap.config import ActiveDirectoryGroupType
-AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
-            "dc=cops,dc=com", ldap.SCOPE_SUBTREE, "(objectCategory=Group)"
-            )
-AUTH_LDAP_GROUP_TYPE = ActiveDirectoryGroupType(name_attr="cn")
-AUTH_LDAP_USER_FLAGS_BY_GROUP = {
-            "is_superuser": "CN=django-admins,CN=Users,DC=COPS,DC=COM",
-            "is_staff": "CN=django-admins,CN=Users,DC=COPS,DC=COM",
-            }
-AUTH_LDAP_FIND_GROUP_PERMS = True
-AUTH_LDAP_CACHE_GROUPS = True
-AUTH_LDAP_GROUP_CACHE_TIMEOUT = 1  # 1 hour cache
+# AUTH_LDAP_USER_ATTR_MAP = {
+#             "username": "sAMAccountName",
+#                 "first_name": "givenName",
+#                     "last_name": "sn",
+#                         "email": "mail",
+# }
+# from django_auth_ldap.config import ActiveDirectoryGroupType
+# AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+#             "dc=cops,dc=com", ldap.SCOPE_SUBTREE, "(objectCategory=Group)"
+#             )
+# AUTH_LDAP_GROUP_TYPE = ActiveDirectoryGroupType(name_attr="cn")
+# AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+#             "is_superuser": "CN=django-admins,CN=Users,DC=COPS,DC=COM",
+#             "is_staff": "CN=django-admins,CN=Users,DC=COPS,DC=COM",
+#             }
+# AUTH_LDAP_FIND_GROUP_PERMS = True
+# AUTH_LDAP_CACHE_GROUPS = True
+# AUTH_LDAP_GROUP_CACHE_TIMEOUT = 1  # 1 hour cache
 
-AUTHENTICATION_BACKENDS = [
-            'django_auth_ldap.backend.LDAPBackend',
-            'django.contrib.auth.backends.ModelBackend',
-]
 # AUTHENTICATION_BACKENDS = [
-#    'osg-support.authentication_backend.AuthenticationBackend',
+#             'django_auth_ldap.backend.LDAPBackend',
+#             'django.contrib.auth.backends.ModelBackend',
 # ]
+
 
 
 # checkout the documentation for more settings
@@ -189,4 +199,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 # all static files will be collected at path mentioned in STATIC_ROOT
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_DIR = os.path.join(BASE_DIR,"static")
 STATIC_URL = '/static/'
+# STATIC_URL="http://192.168.175.128/static/"

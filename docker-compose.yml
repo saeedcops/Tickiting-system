@@ -29,7 +29,7 @@ services:
     # this command will execute after execution all build steps from './docker/django/dockerfile'
     command: /gunicorn.sh
     volumes:
-      - static_volume:/app/static
+      - static_volume:/var/www/html/osg-support/static
     # links attribute will let postgres service become available first.
     links:
       - postgres
@@ -39,14 +39,17 @@ services:
     env_file:
       - ./docker/django/.django_local_env
 
-  nginx:
+  apache:
     build:
       context: .
-      dockerfile: ./docker/nginx/dockerfile
+      dockerfile: ./docker/apache/Dockerfile
     ports:
-      - "8000:8000"
+      - "80:80"
+      - "443:443"
     volumes:
-      - static_volume:/app/static
+      - static_volume:/var/www/html/osg-support/static
     links:
       - django
     restart: always
+    env_file:
+      - ./docker/django/.django_local_env

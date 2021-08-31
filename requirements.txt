@@ -1,8 +1,10 @@
 django==3.2.6
 gunicorn==20.1.0
 psycopg2==2.9.1
-python-ldap==3.3.1 
-django-auth-ldap==3.0.0
+mod-wsgi==4.9.0
+# python-ldap==3.3.1 
+# django-auth-ldap==3.0.0
+ldap3==2.9.1
 
 # django-auth-adfs==1.8.0 
 

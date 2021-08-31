@@ -4,10 +4,11 @@ ENV PYTHONUNBUFFERED 1
 ENV LANG en_US.utf8
 
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y  libldap2-dev libsasl2-dev slapd ldap-utils
-# creating 
-
-
+# RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y libldap2-dev libsasl2-dev slapd ldap-utils
+# creating libapache2-mod-auth-kerb
+RUN apt-get update && apt-get install -y nano apache2 apache2-dev
+# RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y  krb5-user
+RUN pip install --upgrade pip
 RUN mkdir /app
 
 # copy all file in app folder
