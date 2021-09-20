@@ -1,1 +1,3 @@
 FROM postgres:10.12
+ENV TZ=Africa/Cairo
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone

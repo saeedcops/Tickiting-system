@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<div class="row mt-3">
+        <div class="col-md-10 bg-light py-1 ">
+
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mt-1">
+                <li class="breadcrumb-item"><a href="{% url 'expenses' %}">Expenses</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit Expenses</li>
+              </ol>
+            </nav>
+            </div>
+
+        <div class="col-md-2">
+            <a href="{% url 'delete-expenses' expenses.pk %}" class="btn btn-danger m-sm-1">Delete</a>
+        </div>
+    </div>
+
+
+    <div class="card m-sm-2">
+        <div class="card-body">
+            {% include 'partials/messages.html' %}
+            <form action="{% url 'edit-expenses' expenses.pk %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input value="{{expenses.amount}}" name="amount" type="number" class="form-control form-control-sm">
+                </div>
+
+                  <div class="form-group">
+                    <label>Description</label>
+                    <input value="{{expenses.description}}" name="description" type="text" class="form-control form-control-sm">
+                </div>
+
+                  <div class="form-group">
+                    <label>Category</label>
+                      <select name="category" class="form-control form-control-sm">
+                          <option selected name="category" value="{{expenses.category}}">{{expenses.category}}</option>
+                          {% for cat in category %}
+                          <option name="category" value="{{cat.name}}">{{cat.name}}</option>
+                          {% endfor %}
+
+                      </select>
+                </div>
+
+                  <div class="form-group">
+                    <label>Date</label>
+                    <input value="{{expenses.date |date:'Y-m-d' }}" name="date" type="date" class="form-control form-control-sm">
+                </div>
+
+                 <div class="form-group mt-5">
+                    <input type="submit" value="Submit" class=" btn btn-primary form-control form-control-sm">
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock content %}

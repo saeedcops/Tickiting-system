@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['192.168.10.143','osg-support']
+ALLOWED_HOSTS = ['192.168.10.143','osg-support.com','osg-support.cops.com']
 # ALLOWED_HOSTS = ['192.168.175.128','django-docker']
 
 
@@ -39,8 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django_auth_adfs',
+    'django_auth_adfs',
+    'userticket',
+    'userpreferences',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -48,75 +51,49 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-     # Add the new middleware just after the default AuthenticationMiddleware that manages sessions and cookies
-    # 'osg-support.authentication_middleware.AutomaticUserLoginMiddleware',
-
-      # specifying them in the LOGIN_EXEMPT_URLS setting.
-    # 'django_auth_adfs.middleware.LoginRequiredMiddleware',
-
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+      # You can specify URLs for which login is not enforced by
+    # specifying them in the LOGIN_EXEMPT_URLS setting.
+    'django_auth_adfs.middleware.LoginRequiredMiddleware',
 ]
 
-# You can point login failures to a custom Django function based view for customization of the UI
-# CUSTOM_FAILED_RESPONSE_VIEW = 'dot.path.to.custom.views.login_failed'
+AUTHENTICATION_BACKENDS = [
+   'django_auth_adfs.backend.AdfsAuthCodeBackend',
+]
 
-AUTHENTICATION_BACKENDS = (
+AUTH_ADFS = {
+    #thumprint 1B768C679C082F927549DEBCE48C4BE9B838A1B9
+    "SERVER": "adfs.cops.com",
+    "CLIENT_ID": "3217e946-3839-4e89-8f78-4dfa1bf5865d",
+    # "RELYING_PARTY_ID": "7a9ca44a-1766-47b7-9264-b76337cfe69c",
+    "RELYING_PARTY_ID": "osg-support.cops.com",
+    # Make sure to read the documentation about the AUDIENCE setting
+    # when you configured the identifier as a URL!
+    "AUDIENCE": "microsoft:identityserver:osg-support.cops.com",
+    "CA_BUNDLE": False,
+    # "CA_BUNDLE":"/adfs-pub.pem",
+     "CLAIM_MAPPING": {"first_name": "given_name",
+                      "last_name": "family_name",
+                      "email": "email"},
+    "USERNAME_CLAIM": "winaccountname",
+    "GROUP_CLAIM": "group",
+    "GROUP_TO_FLAG_MAPPING": {"is_staff": "Domain Admins",
+                              "is_superuser": "Domain Admins"},
 
-     "django.contrib.auth.backends.ModelBackend",
-     "django_auth_ldap.backend.LDAPBackend",
-    # 'django_auth_adfs.backend.AdfsAuthCodeBackend',
-  
-)
-
-import ldap
-from django_auth_ldap.config import LDAPSearch
-
-# AUTH_LDAP_SERVER_URI = os.environ.get("LDAP_HOST")
-AUTH_LDAP_SERVER_URI = "ldap://ldap.cops.com"
-AUTH_LDAP_ALWAYS_UPDATE_USER = True
-AUTH_LDAP_BIND_DN = "saeed" # os.environ.get("LDAP_USERNAME")
-AUTH_LDAP_BIND_PASSWORD =  "P@ssw0rd" #os.environ.get("LDAP_PASSWORD")
-AUTH_LDAP_USER_SEARCH = LDAPSearch(
-    "ou=users,dc=cops,dc=com", ldap.SCOPE_SUBTREE, "sAMAccountName=%(user)s"
-)
-AUTH_LDAP_USER_ATTR_MAP = {
-    "username": "sAMAccountName",
-    "first_name": "givenName",
-    "last_name": "sn",
-    "email": "mail",
 }
 
-
-
-# AUTHENTICATION_BACKENDS = [
-#    'osg-support.authentication_backend.AuthenticationBackend',
-# ]
-
-# checkout the documentation for more settings
-# AUTH_ADFS = {
-#     "SERVER": "adfs.yourcompany.com",
-#     "CLIENT_ID": "your-configured-client-id",
-#     "RELYING_PARTY_ID": "your-adfs-RPT-name",
-#     # Make sure to read the documentation about the AUDIENCE setting
-#     # when you configured the identifier as a URL!
-#     "AUDIENCE": "microsoft:identityserver:your-RelyingPartyTrust-identifier",
-#     "CA_BUNDLE": "/path/to/ca-bundle.pem",
-#     "CLAIM_MAPPING": {"first_name": "given_name",
-#                       "last_name": "family_name",
-#                       "email": "email"},
-# }
-
-# # Configure django to redirect users to the right URL for login
-# LOGIN_URL = "django_auth_adfs:login"
-# LOGIN_REDIRECT_URL = "/"
+# Configure django to redirect users to the right URL for login
+LOGIN_URL = "django_auth_adfs:login"
+LOGIN_REDIRECT_URL = "/"
+# CUSTOM_FAILED_RESPONSE_VIEW = 'dot.path.to.custom.views.login_failed'
 
 ROOT_URLCONF = 'osg-support.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'template')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -182,5 +159,28 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 # all static files will be collected at path mentioned in STATIC_ROOT
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = '/static/'
+STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
+STATIC_ROOT=os.path.join(BASE_DIR,'/static')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(name)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django_auth_adfs': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}

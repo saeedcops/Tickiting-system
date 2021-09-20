@@ -1,0 +1,33 @@
+
+ {% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href=" {% static 'css/splash.css' %} " rel="stylesheet">
+    <title>OSG-Suport{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+
+    <div class='intro'>
+
+        <h1 class='logo-header'>
+            <span class='logo'>OSG</span><span class='logo'> Support</span>
+        </h1>
+        <br>
+        
+    </div>
+
+    <header>
+        <h4>OSG Support</h4>
+    </header>
+
+    <script src="{% static 'js/splash.js' %}"></script>
+</body>
+
+</html>
+
+

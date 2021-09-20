@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<div class="row mt-3">
+        <div class="col-md-10 bg-light py-1 ">
+
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mt-1">
+                <li class="breadcrumb-item"><a href="{% url 'income' %}">Incomes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit Incomes</li>
+              </ol>
+            </nav>
+            </div>
+
+        <div class="col-md-2">
+            <a href="{% url 'delete-income' income.pk %}" class="btn btn-danger m-sm-1">Delete</a>
+        </div>
+    </div>
+
+
+    <div class="card m-sm-2">
+        <div class="card-body">
+            {% include 'partials/messages.html' %}
+            <form action="{% url 'edit-income' income.pk %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input value="{{income.amount}}" name="amount" type="number" class="form-control form-control-sm">
+                </div>
+
+                  <div class="form-group">
+                    <label>Description</label>
+                    <input value="{{income.description}}" name="description" type="text" class="form-control form-control-sm">
+                </div>
+
+                  <div class="form-group">
+                    <label>Source</label>
+                      <select name="source" class="form-control form-control-sm">
+                          <option selected name="source" value="{{income.source}}">{{income.source}}</option>
+                          {% for cat in source %}
+                          <option name="source" value="{{cat.name}}">{{cat.name}}</option>
+                          {% endfor %}
+
+                      </select>
+                </div>
+
+                  <div class="form-group">
+                    <label>Date</label>
+                    <input value="{{income.date |date:'Y-m-d' }}" name="date" type="date" class="form-control form-control-sm">
+                </div>
+
+                 <div class="form-group mt-5">
+                    <input type="submit" value="Submit" class=" btn btn-primary form-control form-control-sm">
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock content %}

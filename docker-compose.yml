@@ -17,11 +17,10 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     ports:
       - "5432:5432"
-    # network_mode: "host"
     # all environment variables are defined in below file.
     env_file:
       - ./docker/postgres/.postgres_local_env
-
+ 
   django:
     build:
       context: .
@@ -30,39 +29,28 @@ services:
     # this command will execute after execution all build steps from './docker/django/dockerfile'
     command: /gunicorn.sh
     volumes:
-      - static_volume:/app/static
+      - static_volume:/vol/web/static
     # links attribute will let postgres service become available first.
-    links:
+    depends_on:
       - postgres
     expose:
       - "8000"
     restart: always
-   
-    # network_mode: "host"
     env_file:
       - ./docker/django/.django_local_env
 
-  apache:
-    restart: always
+  nginx:
+    hostname: osg-support.cops.com
     build:
       context: .
-      dockerfile: ./docker/apache/dockerfile
+      dockerfile: ./docker/nginx/Dockerfile
     ports:
       - "80:80"
+      - "443:443"
     volumes:
-     - static_volume:/app/static
+      - static_volume:/vol/web/static
     links:
-      - django:django
-
-  # nginx:
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/nginx/dockerfile
-  #   ports:
-  #     - "8000:8000"
-  #   volumes:
-  #     - static_volume:/app/static
-  #   # network_mode: "host"
-  #   links:
-  #     - django
-  #   restart: always
+      - django
+    restart: always
+    env_file:
+      - ./docker/django/.django_local_env

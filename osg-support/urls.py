@@ -15,10 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from django.urls import path, include
-
+from django.urls import path,include
+from django.conf import settings
+from django.conf.urls.static import static
+from userticket import urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    # path('oauth2/', include('django_auth_adfs.urls')),
-]
+    path('oauth2/', include('django_auth_adfs.urls')),
+    path('', include(urls)),
+    # path('preferences/', include('userpreferences.urls')),
+
+
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

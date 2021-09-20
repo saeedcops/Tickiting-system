@@ -5,8 +5,9 @@ ENV LANG en_US.utf8
 
 
 RUN apt-get update
-RUN apt-get install -y apache2 apache2-dev
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y  libldap2-dev libsasl2-dev slapd ldap-utils
+RUN apt-get install -y --reinstall ca-certificates
+# RUN apt-get install -y apache2 apache2-dev
+# RUN DEBIAN_FRONTEND=noninteractive apt-get install -y  libldap2-dev libsasl2-dev slapd ldap-utils
 # creating 
 RUN mkdir /app
 
@@ -16,9 +17,21 @@ COPY . /app
 COPY requirements.txt /requirements.txt
 # copy db connectivity test script, because we have made /app as current working directory so script can be executed.
 COPY docker/django/scripts/db_connectivity.sh /db_connectivity.sh
+COPY docker/django/adfs-pub.pem /adfs-pub.pem
+COPY docker/django/adfs-pub.pem /usr/local/share/ca-certificates/adfs-pub.crt
+COPY docker/django/4536904705.crt /usr/local/share/ca-certificates/4536904705.crt
+RUN chmod 644 /usr/local/share/ca-certificates/adfs-pub.crt
+RUN chmod 644 /usr/local/share/ca-certificates/4536904705.crt
 # copy start gunicorn server script, because we have made /app as current working directory so script can be executed.
 COPY docker/django/scripts/gunicorn.sh /gunicorn.sh
 # running pip command to install all dependencies
+ENV TZ=Africa/Cairo
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN echo "192.168.10.200  adfs.cops.com" >> /etc/hosts
+RUN export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+RUN update-ca-certificates
+RUN pip3 install --upgrade certifi
 RUN pip install -r requirements.txt
 
 RUN chmod +x /db_connectivity.sh
