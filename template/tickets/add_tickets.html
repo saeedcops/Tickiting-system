@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="bg-light py-1 ps-1 m-sm-2">
+
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mt-1">
+                <li class="breadcrumb-item"><a href="">Tickets</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Add Ticket</li>
+              </ol>
+            </nav>
+</div>
+
+
+
+    <div class="card m-sm-2">
+        <div class="card-body">
+            {% include 'partials/messages.html' %}
+            <form action="{% url 'add-ticket' %}" method="post">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label>Priority</label>
+                      <select name="priority"class="form-control form-control-sm">
+                          
+                          <option name="priority" value="1">High</option>
+                          <option name="priority" value="2" selected>Mid</option>
+                          <option name="priority" value="3">Low</option>
+                         
+
+                      </select>
+                </div>
+
+                  <div class="form-group">
+                    <label>Description</label>
+                    <input value="{{values.description}}" name="description" type="text" class="form-control form-control-sm">
+                </div>
+
+                  <div class="form-group">
+                    <label>Category</label>
+                      <select name="category"class="form-control form-control-sm">
+                          {% for cat in category %}
+                          <option name="category" value="{{cat.name}}">{{cat.name}}</option>
+                          {% endfor %}
+
+                      </select>
+                </div>
+                
+
+                 <div class="form-group mt-5">
+                    <input type="submit" value="Submit" class=" btn btn-primary form-control form-control-sm">
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+
+
+{% endblock content %}

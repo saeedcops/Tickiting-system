@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['192.168.10.143','osg-support.com','osg-support.cops.com']
+ALLOWED_HOSTS = ['192.168.10.143','osg-support.cops.com']
 # ALLOWED_HOSTS = ['192.168.175.128','django-docker']
 
 
@@ -40,8 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_auth_adfs',
-    'userticket',
-    'userpreferences',
+    # 'userticket',
+    # 'userpreferences',
+    'ticket',
+    'core',
 ]
 
 
@@ -65,8 +67,8 @@ AUTHENTICATION_BACKENDS = [
 AUTH_ADFS = {
     #thumprint 1B768C679C082F927549DEBCE48C4BE9B838A1B9
     "SERVER": "adfs.cops.com",
-    "CLIENT_ID": "3217e946-3839-4e89-8f78-4dfa1bf5865d",
-    # "RELYING_PARTY_ID": "7a9ca44a-1766-47b7-9264-b76337cfe69c",
+    "CLIENT_ID": "fc7fa0a9-9d20-42b4-afe4-e9af44aa5883",
+    # "RELYING_PARTY_ID": "b8af9f88-85a1-4a9c-8bf6-5bcd71a9e413",
     "RELYING_PARTY_ID": "osg-support.cops.com",
     # Make sure to read the documentation about the AUDIENCE setting
     # when you configured the identifier as a URL!

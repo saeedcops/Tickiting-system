@@ -1,6 +1,7 @@
-
-python /app/manage.py collectstatic --noinput
+python /app/manage.py makemigrations
 python /app/manage.py migrate
+python /app/manage.py collectstatic --noinput
+
 
 # mod_wsgi-express start-server osg-support.wsgi --user www-data --group www-data
 

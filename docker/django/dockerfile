@@ -17,9 +17,10 @@ COPY . /app
 COPY requirements.txt /requirements.txt
 # copy db connectivity test script, because we have made /app as current working directory so script can be executed.
 COPY docker/django/scripts/db_connectivity.sh /db_connectivity.sh
-COPY docker/django/adfs-pub.pem /adfs-pub.pem
-COPY docker/django/adfs-pub.pem /usr/local/share/ca-certificates/adfs-pub.crt
+COPY docker/django/adfs.cer /adfs-pub.pem
+COPY docker/django/adfs.cer /usr/local/share/ca-certificates/adfs-pub.crt
 COPY docker/django/4536904705.crt /usr/local/share/ca-certificates/4536904705.crt
+RUN chmod 644 /adfs-pub.pem
 RUN chmod 644 /usr/local/share/ca-certificates/adfs-pub.crt
 RUN chmod 644 /usr/local/share/ca-certificates/4536904705.crt
 # copy start gunicorn server script, because we have made /app as current working directory so script can be executed.
@@ -32,6 +33,8 @@ RUN echo "192.168.10.200  adfs.cops.com" >> /etc/hosts
 RUN export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 RUN update-ca-certificates
 RUN pip3 install --upgrade certifi
+#--mount=type=cache,mode=0755,target=/root/.cache/pip
+
 RUN pip install -r requirements.txt
 
 RUN chmod +x /db_connectivity.sh

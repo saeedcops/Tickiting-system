@@ -29,6 +29,7 @@ services:
     # this command will execute after execution all build steps from './docker/django/dockerfile'
     command: /gunicorn.sh
     volumes:
+      - .:/app
       - static_volume:/vol/web/static
     # links attribute will let postgres service become available first.
     depends_on:
