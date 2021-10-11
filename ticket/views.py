@@ -7,15 +7,32 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.utils.timezone import now
 from django.contrib.auth.decorators import login_required
-from core.models import Category, Ticket
+from core.models import Category, Ticket, UserProfile,AdminProfile
 from django.core.paginator import Paginator
 import csv
+
+## importing socket module
+# import socket
 
 # Create your views here.
 def index(request):
     print("User: ",str(request.user))
     print("META: ",str(request.META['HTTP_X_FORWARDED_FOR']))
     print("body: ",str(request.body))
+    from datetime import datetime
+    print(datetime.now())
+    ## getting the hostname by socket.gethostname() method
+    # hostname = socket.gethostname()
+    ## getting the IP address using socket.gethostbyname() method
+    # ip_address = socket.gethostbyname(hostname)
+    ## printing the hostname and ip_address
+    # print(f"Hostname: {hostname}")
+    # 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
+    
+    # print(f"IP Address: {ip_address}")
+    # print("REMOTE_HOST: ",str(request.META['HTTP_X_FORWARDED_HOST']))
+    # print("HTTP_HOST: ",str(request.META['HTTP_X_FORWARDED_SERVER']))
+    # UserProfile.objects.all().delete()
     # print("Json: ",json.loads(request.body))
     
     if request.user.is_staff:
@@ -27,7 +44,7 @@ def index(request):
 
         # return render(request, 'admin/index.html')
     else:
-        tickets = Ticket.objects.filter(user=request.user)
+        tickets = Ticket.objects.filter(user=UserProfile.objects.get(user=request.user))
         paginator = Paginator(tickets, 6)
         page_number = request.GET.get('page')
         page_obj = Paginator.get_page(paginator, page_number)
@@ -52,7 +69,7 @@ def add_ticket(request):
             messages.error(request, "Please, enter description")
             return render(request, 'tickets/add_tickets.html', {'category': category, 'values': request.POST})
 
-        Ticket.objects.create(priority=priority, description=description, category=cat, user=request.user)
+        Ticket.objects.create(priority=priority, description=description, category=cat, user=UserProfile.objects.get(user=request.user))
 
         messages.success(request, "Ticket Added Successfully")
         return redirect('ticket')

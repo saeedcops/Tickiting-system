@@ -32,10 +32,12 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN echo "192.168.10.200  adfs.cops.com" >> /etc/hosts
 RUN export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 RUN update-ca-certificates
-RUN pip3 install --upgrade certifi
+RUN pip install --upgrade certifi
 #--mount=type=cache,mode=0755,target=/root/.cache/pip
 
 RUN pip install -r requirements.txt
+
+# RUN python setup.py install
 
 RUN chmod +x /db_connectivity.sh
 RUN chmod +x /gunicorn.sh
@@ -44,4 +46,4 @@ RUN chmod +x /gunicorn.sh
 WORKDIR /app
 
 #It will check whether we are able to connect to postgres service or not.
-ENTRYPOINT ["/db_connectivity.sh"]
+ENTRYPOINT ["/gunicorn.sh"]

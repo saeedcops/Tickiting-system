@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+
+
+
+    <div class="row m-2">
+        <div class="col-md-10 bg-light py-1 ps-1">
+
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mt-1">
+                <li class="breadcrumb-item"><a href="#">Permission</a></li>
+                <li class="breadcrumb-item active" aria-current="page">My Permissions</li>
+              </ol>
+            </nav>
+        </div>
+
+        <div class="col-md-2">
+            <a href="{% url 'permission' %}" class="btn btn-primary m-sm-1">Request</a>
+        </div>
+    </div>
+
+    {% include 'partials/messages.html' %}
+   
+
+
+    <div class="container">
+    <h2 >Applications</h2>
+
+          {% for app in permission.apps %}
+            
+                <h3>{{app.name}}</h3>
+              
+            
+          {% endfor %}
+       
+        </div>
+
+   
+
+    
+</div>
+
+
+</div>
+<!--
+ <script src="{% static 'js/search.js' %}"></script>
+ -->
+{% endblock %}

@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_auth_adfs',
-    # 'userticket',
-    # 'userpreferences',
+    'users',
+    'admins',
     'ticket',
     'core',
 ]
@@ -67,13 +67,14 @@ AUTHENTICATION_BACKENDS = [
 AUTH_ADFS = {
     #thumprint 1B768C679C082F927549DEBCE48C4BE9B838A1B9
     "SERVER": "adfs.cops.com",
-    "CLIENT_ID": "fc7fa0a9-9d20-42b4-afe4-e9af44aa5883",
+    "CLIENT_ID": "c71c316a-5696-4f92-9d67-b91efee5c0e2",
     # "RELYING_PARTY_ID": "b8af9f88-85a1-4a9c-8bf6-5bcd71a9e413",
     "RELYING_PARTY_ID": "osg-support.cops.com",
     # Make sure to read the documentation about the AUDIENCE setting
     # when you configured the identifier as a URL!
     "AUDIENCE": "microsoft:identityserver:osg-support.cops.com",
     "CA_BUNDLE": False,
+    # "accessTokenAcceptedVersion": null,
     # "CA_BUNDLE":"/adfs-pub.pem",
      "CLAIM_MAPPING": {"first_name": "given_name",
                       "last_name": "family_name",
@@ -82,7 +83,6 @@ AUTH_ADFS = {
     "GROUP_CLAIM": "group",
     "GROUP_TO_FLAG_MAPPING": {"is_staff": "Domain Admins",
                               "is_superuser": "Domain Admins"},
-
 }
 
 # Configure django to redirect users to the right URL for login
@@ -149,7 +149,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Cairo'
 
 USE_I18N = True
 
@@ -185,4 +185,11 @@ LOGGING = {
             'level': 'DEBUG',
         },
     },
+}
+
+from django.contrib import messages
+
+# change error to danger
+MESSAGE_TAGS={
+    messages.ERROR:"danger"
 }

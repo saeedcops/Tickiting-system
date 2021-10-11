@@ -21,9 +21,11 @@ from django.conf.urls.static import static
 # from userticket import urls
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    path('root/', admin.site.urls),
     path('oauth2/', include('django_auth_adfs.urls')),
-    path('', include('ticket.urls')),
+    # path('', include('ticket.urls')),
+    path('', include('users.urls')),
+    path('admins/', include('admins.urls')),
     # path('', include('userticket.urls')),
    
     # path('preferences/', include('userpreferences.urls')),

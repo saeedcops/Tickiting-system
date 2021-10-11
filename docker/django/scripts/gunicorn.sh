@@ -1,3 +1,8 @@
+#!/bin/sh
+
+set -e
+
+python /app/manage.py wait_for_db
 python /app/manage.py makemigrations
 python /app/manage.py migrate
 python /app/manage.py collectstatic --noinput

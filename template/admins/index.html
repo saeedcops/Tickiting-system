@@ -48,6 +48,7 @@
         <thead>
             <tr>
                 <th> Priority</th>
+                <th> User</th>
                 <th> Category</th>
                 <th> Description</th>
                 <th> Date</th>
@@ -59,6 +60,7 @@
         {% for ex in page_obj %}
         <tr>
             <td>{{ex.priority}}</td>
+            <td>{{ex.user.name}}</td>
             <td>{{ex.category}}</td>
             <td>{{ex.description}}</td>
             <td>{{ex.open_date}}</td>
@@ -76,7 +78,7 @@
             <table class="table table-stripped table-hover">
         <thead>
             <tr>
-                <th> Priority ({{ currency }})</th>
+                <th> Priority</th>
                 <th> Category</th>
                 <th> Description</th>
                 <th> Date</th>
